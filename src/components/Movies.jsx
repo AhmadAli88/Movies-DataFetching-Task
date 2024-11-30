@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const Movies = () => {
   const [filteredMovies, setFilteredMovies] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -30,6 +32,11 @@ const Movies = () => {
     fetchMovies();
   }, []);
 
+  const handleMovieClick = (id) => {
+    // Navigate to the List component with filteredMovies passed as state
+    navigate(`/list/${id}`, { state: { filteredMovies } });
+  };
+
   return (
     <div>
       <h1>Movies</h1>
@@ -37,14 +44,12 @@ const Movies = () => {
         <Row>
           {filteredMovies.map((movie) => (
             <Col lg={4} md={6} sm={12} key={movie.id} className="mb-4">
-              <Card>
-                <Card.Img
-                  variant="top"
-                  src={movie.thumbnailUrl}
-                  alt={movie.title}
-                />
+              <Card
+                onClick={() => handleMovieClick(movie.id)}
+                style={{ cursor: 'pointer' }}
+              >
                 <Card.Body>
-                  <Card.Title>{movie.title}</Card.Title>
+                  <Card.Title>{movie.id}</Card.Title>
                 </Card.Body>
               </Card>
             </Col>
